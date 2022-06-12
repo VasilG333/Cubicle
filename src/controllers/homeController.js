@@ -1,7 +1,14 @@
 const router = require('express').Router();
-const cubes = require('../db.json')
+const cubeController = require('./cubeController');
 
-router.get('/', (req, res) => res.render('index', {cubes})) 
-router.get('/about', (req, res) => res.render('about')) 
+
+router.get('/', (req, res) => {
+    const { search, from, to } = req.query;
+    console.log(search, from, to);
+    const cubes = cubeController.getFiltered(search, from, to)
+
+    res.render('index', { cubes })
+})
+router.get('/about', (req, res) => res.render('about'))
 
 module.exports = router;
