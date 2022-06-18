@@ -1,12 +1,11 @@
 const router = require('express').Router();
 
-const searchController = require('./searchController');
+const cubeService = require('../service/cubeService')
 
 
-
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     const { search, from, to } = req.query;
-    const cubes = searchController.getFiltered(search, from, to)
+    const cubes = await cubeService.getAll(search, from, to)
     res.render('index', { cubes, search, from, to })
 })
 router.get('/about', (req, res) => res.render('about'))

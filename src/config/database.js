@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
-const urlMongo = 'mongodb://localhost:27017/Cubicle'
+const mongoose = require('mongoose');
 
-exports.dbStart = () => mongoose.connect(urlMongo)
+const connectionString = 'mongodb://localhost:27017/softuni-cubicle';
+
+exports.initializeDatabase = () => mongoose.connect(connectionString);
