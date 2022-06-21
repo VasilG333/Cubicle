@@ -18,7 +18,7 @@ exports.register = async (username, password, repeatPassword) => {
     }
 }
 
-exports.login = async (username, password) => {
+exports.login = async ({username, password}) => {
     const user = await User.findOne({ username: username }).lean();
     if (!user) {
         // res.redirect('404')

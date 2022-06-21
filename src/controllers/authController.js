@@ -18,9 +18,11 @@ router.get('/login', (req, res) => {
 router.post('/login', async (req, res) => {
     const token = await authService.login(req.body);
     if(!token) {
-        res.redirect('404')
+        res.redirect('/404');
+        return;
     }
-    res.redirect('/');
+    res.cookie('session', token);
+    res.redirect('/')
 })
 
 module.exports = router
