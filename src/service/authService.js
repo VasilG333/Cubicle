@@ -1,13 +1,13 @@
 const bcrypt = require('bcrypt');
-const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 const salt = 10;
+const secret = 'aiurfhasolgi;dfoujh234-9857yuweiulfyhw923ophq4'
 
 
 exports.register = async (username, password, repeatPassword) => {
-    if(password === repeatPassword) {
+    if (password === repeatPassword) {
         const hash = await bcrypt.hash(password, salt)
         await User.create({
             username: username,
@@ -19,11 +19,28 @@ exports.register = async (username, password, repeatPassword) => {
 }
 
 exports.login = async (username, password) => {
-    const user = await User.findOne({username: username}).lean();
-    let answer = await bcrypt.compare(password, user.password)
-    if(answer) {
-
+    const user = await User.findOne({ username: username }).lean();
+    if (!user) {
+        // res.redirect('404')
+        return;
     }
+
+    const isValid = await bcrypt.compare(password, user.password)
+
+    if(!isValid) {
+        return;
+    }
+    
+    const result = new Promise((resolve, reject) => {
+        jwt.sign({id: user._id, username: user.username}, secret, {expiresIn: '2d'}, (err, token) => {
+            if(err) {
+                reject(err);
+            }
+            resolve(token);
+        })
+    })
+
+    return result;
 }
 
 
